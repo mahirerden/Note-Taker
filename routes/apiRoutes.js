@@ -32,7 +32,7 @@ function init() {
 
 function writeToJsonFile(notes) {
      let notesJSON = JSON.stringify(notes, null, 2);
-     fs.writeFile("../db/notes.json", notesJSON, function (err) {
+     fs.writeFile("./db/notes.json", notesJSON, function (err) {
           if (err) {
                throw err;
           }

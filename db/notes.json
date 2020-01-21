@@ -1,11 +1,14 @@
 [
-     {
-          "title": "1stNote",
-          "note": "This is the first note" 
-     },
-     {
-          "title": "2ndNote",
-          "note": "This is the second note"
-     }
+  {
+    "title": "1stNote",
+    "note": "This is the first note"
+  },
+  {
+    "title": "2ndNote",
+    "note": "This is the second note"
+  },
+  {
+    "title": "3rd note",
+    "note": "This is the third note"
+  }
 ]
-
