@@ -1,6 +1,15 @@
 const express = require('express');
+
+const path = require('path');
+
 const app = express();
+var PORT = process.env.PORT || 8080;
 
-app.use(express.static('public'));
+app.use(express.urlencoded({ extended: true }));
+app.use(express.json());
 
-app.listen(process.env.PORT || 8080, ()  => console.log("Server is running"));
+require("./routes/apiRoutes")(app);
+require("./routes/htmlRoutes")(app);
+
+app.listen(PORT, () => console.log("Server is running on " + PORT));
+
