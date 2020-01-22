@@ -1,9 +1,9 @@
 const fs = require('fs');
 
 let notes = [];
+var lastId = 0;
 
 init();
-
 module.exports = function(app) {
 
   app.get("/api/notes", function(req, res) {
@@ -11,10 +11,18 @@ module.exports = function(app) {
   });
 
   app.post("/api/index", function(req, res) {
+      req.body.id = parseInt(lastId);
       notes.push(req.body);
       writeToJsonFile(notes);
       res.json(true);
   });
+
+  app.delete("/api/index/:id", function(req, res) {
+     var filteredNotes = notes.filter(note => note.id !== parseInt(req.params.id)); 
+     writeToJsonFile(filteredNotes);
+     notes = filteredNotes;
+     res.json(true);
+ });
 
 };
 
@@ -27,6 +35,7 @@ function init() {
           notesJSON.forEach(function (note) {
                notes.push(note);
           });
+          lastId = Math.max(...notes.map(obj => obj.id), 0) + 1;
      });
 };
 

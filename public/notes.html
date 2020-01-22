@@ -17,11 +17,12 @@
 
   <div class="container">
 
-    <div class="jumbotron">
-      <h1 class="text-center"><span class="fas fa-clipboard"></span> My Note Taker</h1>
+    <div class="jumbotron bg-primary text-white text-center">
+      <h1 class="text-center"><span>My Note Taker</span></h1>
 
       <div class="text-center">
-          <a href="/index"><button class="btn btn-lg btn-danger"><span class="fa fa-plus"></span> Add New Note</button></a>
+        <a href="/index"><button class="btn btn-lg btn-danger"><span class="fa fa-plus"> Add New
+          Note</span></button></a>
       </div>
     </div>
 
@@ -38,14 +39,14 @@
           </div>
         </div>
 
-    <footer class="footer mt-4">
-      <div class="container">
-        <p>Control Panel</p>
-        <p><a href="/api/notes">API Notes Link</a>
-      </div>
-    </footer>
+        <footer class="footer mt-4">
+          <div class="container">
+            <p>Control Panel</p>
+            <p><a href="/api/notes">API Notes Link</a>
+          </div>
+        </footer>
 
-  </div>
+      </div>
 
 </body>
 
@@ -54,7 +55,7 @@
   function runNoteQuery() {
     // The AJAX function uses the URL of our API to GET the data associated with it (initially set to localhost)
     $.ajax({ url: "/api/notes", method: "GET" })
-      .then(function(notes) {
+      .then(function (notes) {
 
         // Here we then log the tableData to console, where it will show up as an object.
         console.log(notes);
@@ -65,15 +66,19 @@
 
           // Get a reference to the tableList element and populate it with tables
           var noteList = $("#noteList");
+          var cardBodyDiv = $('.card-body');
 
           // Then display the fields in the HTML (Section Name, Date, URL)
           var listItem = $("<li class='list-group-item mt-4'>");
+          var btn = $('<button class="deleteBtn btn-primary" id="">Delete</button>');
+          btn.attr("btn-id", notes[i].id);
 
           listItem.append(
-            $("<h4>").text("Note #" + (i + 1)),
+            $("<h4>").text("Note #" + notes[i].id),
             $("<h4>"),
             $("<h4>").text("Title: " + notes[i].title),
-            $("<h4>").text("Note: " + notes[i].note)
+            $("<h4>").text("Note: " + notes[i].note),
+            btn
           );
 
           noteList.append(listItem);
@@ -81,16 +86,20 @@
       });
   }
 
-  function clearTable() {
-    alert("Clearing...");
-
-    // Clear the tables on the server and then empty the elements on the client
-    $.ajax({ url: "/api/clear", method: "POST" }).then(function() {
-      $("#tableList").empty();
+  $(document).ready(function () {
+    $(document).on("click", ".deleteBtn", function () {
+      var noteId = $(this).attr("btn-id");
+      console.log(noteId);
+      $.ajax({
+        url: "/api/index/" + noteId,
+        method: "DELETE",
+        success: function() {
+          alert("Note was deleted successfully!");
+          location.reload(true);
+        }
+      });
     });
-  }
-
-  $("#clear").on("click", clearTable);
+  });
 
   runNoteQuery();
 
